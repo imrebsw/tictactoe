@@ -7,6 +7,11 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Font;
 import java.awt.event.ActionListener;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
+
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -59,6 +64,7 @@ public class InitialScreen extends Game{
 	JTextField PlayerOName;
 	
 	TitleScreenHandler tsHandler = new TitleScreenHandler();
+	pNames x = new pNames();
 	
 	//utilizes jPanel and JFrame
 	//introductory screen with title, author, and instructions
@@ -108,9 +114,13 @@ public class InitialScreen extends Game{
 		textFieldPanel.setBounds(100, 350, 600, 50);
 		textFieldPanel.setBackground(Color.black);
 		
-		PlayerXName = new JTextField("player X name");
-		PlayerOName = new JTextField("player O name");
+		PlayerXName = new JTextField();
+		PlayerXName.setText("player X name");
+		PlayerXName.addActionListener(x);
 		
+		PlayerOName = new JTextField("player O name");
+		PlayerOName.setText("player O name");
+		//PlayerOName.addActionListener(actionPerformed1);
 		
 		titlePanel.add(titleLabel);
 		titlePanel.add(nameLabel);
@@ -125,40 +135,45 @@ public class InitialScreen extends Game{
 		
 	}
     
+
 	public void createGameScreen(){
-		
 		window.setVisible(false);
 		new Game().setVisible(true);
 		jLabelMSG.setText(PlayerXName.getText() + "vs" + PlayerOName.getText());
 		window.dispose();
 	}
 	
-	//implements abstract class and interface PlayerInformation
-	public class TitleScreenHandler implements ActionListener, PlayerInformation{
+	public class TitleScreenHandler implements ActionListener{
 		
 		public void actionPerformed(ActionEvent event) {
 			createGameScreen();
 		}
-
-		@Override
-		public void actionPerformed1(ActionEvent getPlayerNames) {
-			PlayerXName.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent x) {
-					 PlayerXName.getText();
-				}
-			});
-			
-			PlayerOName.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent o) {
-					PlayerOName.getText();
-				}
-			});
-			
-		}
 		
 	}
-			
+	
+	//implements abstract class and interface PlayerInformation
+	public class pNames implements ActionListener {
+	public void actionPerformed1(ActionEvent getPlayerNames) {
+		PlayerXName.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent x) {
+				 PlayerXName.getText();
+			}
+		});
+		
+		PlayerOName.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent o) {
+				PlayerOName.getText();
+			}
+		});
+		
+	}
 
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	}
 	//https://www.youtube.com/watch?v=RcvABhflOkI
 	public static void main(String[] args) {
 		new InitialScreen();
