@@ -7,6 +7,8 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Font;
 import java.awt.event.ActionListener;
+import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -37,8 +39,10 @@ import javax.swing.JTextField;
 import java.awt.BorderLayout;
 
 //inherits the Game class
-public class InitialScreen extends Game{
-                   
+public class InitialScreen extends Game implements ActionListener{
+    
+	private String xName, oName;
+	static String summery;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -56,15 +60,14 @@ public class InitialScreen extends Game{
 	JFrame window;
 	Container con;
 	JPanel titlePanel, introPanel, startButtonPanel, textFieldPanel;
-	JLabel titleLabel, introLabel, xLabel, oLabel, nameLabel;
+	JLabel titleLabel, introLabel, nameLabel;
 	Font titleFont = new Font("Times New Roman", Font.ITALIC, 30);
-	JButton startButton;       
+	JButton startButton = new JButton("START");
 	JTextArea introText;
 	JTextField PlayerXName;
 	JTextField PlayerOName;
 	
 	TitleScreenHandler tsHandler = new TitleScreenHandler();
-	pNames x = new pNames();
 	
 	//utilizes jPanel and JFrame
 	//introductory screen with title, author, and instructions
@@ -104,11 +107,11 @@ public class InitialScreen extends Game{
 		startButtonPanel.setBounds(300, 400, 200, 100);
 		startButtonPanel.setBackground(Color.black);
 		
-		startButton = new JButton("START");
 		startButton.setBackground(Color.white);
 		startButton.setForeground(Color.black);
 		startButton.setFont(normalFont);
 		startButton.addActionListener(tsHandler);
+		startButton.addActionListener(this);
 
 		textFieldPanel = new JPanel();
 		textFieldPanel.setBounds(100, 350, 600, 50);
@@ -116,11 +119,9 @@ public class InitialScreen extends Game{
 		
 		PlayerXName = new JTextField();
 		PlayerXName.setText("player X name");
-		PlayerXName.addActionListener(x);
 		
-		PlayerOName = new JTextField("player O name");
-		PlayerOName.setText("player O name");
-		//PlayerOName.addActionListener(actionPerformed1);
+		PlayerOName = new JTextField();
+		PlayerXName.setText("player O name");
 		
 		titlePanel.add(titleLabel);
 		titlePanel.add(nameLabel);
@@ -139,7 +140,7 @@ public class InitialScreen extends Game{
 	public void createGameScreen(){
 		window.setVisible(false);
 		new Game().setVisible(true);
-		jLabelMSG.setText(PlayerXName.getText() + "vs" + PlayerOName.getText());
+		//jLabelMSG.setText(PlayerXName.getText() + "vs" + PlayerOName.getText());
 		window.dispose();
 	}
 	
@@ -152,28 +153,8 @@ public class InitialScreen extends Game{
 	}
 	
 	//implements abstract class and interface PlayerInformation
-	public class pNames implements ActionListener {
-	public void actionPerformed1(ActionEvent getPlayerNames) {
-		PlayerXName.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent x) {
-				 PlayerXName.getText();
-			}
-		});
-		
-		PlayerOName.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent o) {
-				PlayerOName.getText();
-			}
-		});
-		
-	}
 
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-	}
+	
 	//https://www.youtube.com/watch?v=RcvABhflOkI
 	public static void main(String[] args) {
 		new InitialScreen();
@@ -201,6 +182,34 @@ public class InitialScreen extends Game{
               //  new Game().setVisible(true);
             }
         });
+	}
+
+//create and read from files (persistent data)
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if(e.getSource()==startButton) {
+			xName = (" ");
+			oName = (" ");
+			
+			xName = PlayerXName.getText().trim();
+			oName = PlayerOName.getText().trim();
+			
+			summery = ("Player X Name" + xName + "vs") + (oName);
+			
+			String Data = InitialScreen.summery;
+			
+			try {
+				BufferedWriter reader = new BufferedWriter(new FileWriter(new File("kding:/Users/rebekah/git/tictactoe/tictactoe/src/tictactoe/playerName")));
+				reader.write(Data);
+				reader.newLine();
+				reader.close();
+				
+			}catch (IOException E) {
+				System.out.println("Error is" + E);
+			}
+			
+		}
+		
 	}
 	
 }
